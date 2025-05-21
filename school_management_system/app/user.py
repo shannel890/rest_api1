@@ -1,6 +1,6 @@
 from flask_restful import Resource,Api,marshal_with,fields,reqparse,abort
 from app import db,api
-# from app.extension import db
+from app.extension import db
 #Database model
 class UserModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
