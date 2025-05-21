@@ -1,5 +1,4 @@
 from flask_restful import Resource,Api,marshal_with,fields,reqparse,abort
-from app import db,api
 from app.extension import db
 #Database model
 class UserModel(db.Model):
@@ -66,19 +65,9 @@ class User(Resource):
         db.session.delete(user)
         db.session.commit()
         return f'user deleted successfully'
-    #api endpoints
-api.add_resource(Users,'/api/users/')
-api.add_resource(User,'/api/users/<int:id>')
-
-         
+   
 
 
-# class HelloWorld(Resource)
-#     def get(self):
-#         return {'hello': 'world'}
-    
-
-# api.add_resource(HelloWorld,'/api')
 
 
 

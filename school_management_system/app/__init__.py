@@ -1,16 +1,20 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from app.extension import db
 from flask_restful import Api
+from app.resources.user import Users,User
+
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///api.db'
-db = SQLAlchemy(app)
+db.init_app(app)
 api = Api(app)
 
+ #api endpoints
+api.add_resource(Users,'/api/users/')
+api.add_resource(User,'/api/users/<int:id>')
+
+         
 
 
-from app.user import Users,User
 
-
-        
