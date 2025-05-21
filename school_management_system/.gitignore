@@ -1,0 +1,4 @@
+# Ignore Python virtual environment
+.rest_api1/
+instance
+.env/
