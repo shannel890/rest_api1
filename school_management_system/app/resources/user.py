@@ -1,22 +1,17 @@
-from flask_restful import Resource,Api,marshal_with,fields,reqparse,abort
+from flask_restful import Resource,marshal_with,fields,reqparse,abort
 from app.extension import db
-#Database model
-class UserModel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80),unique=True,nullable=False)
-    email = db.Column(db.String(80),unique=True,nullable=False)
-
-    def __repr__(self):
-        return f'{self.username} {self.email}'
+from app.models.users import UserModel
  # request Parser   
 user_args = reqparse.RequestParser()
 user_args.add_argument('username',type=str, required=True,help='username cannot be blank')
 user_args.add_argument('email',type=str, required=True,help='username cannot be blank')
+user_args.add_argument('password',type=str, required=True,help='username cannot be blank')
 #output field
 user_fields = {
     'id': fields.Integer,
     'username': fields.String,
-    'email': fields.String
+    'email': fields.String,
+    'password':fields.String
 }
 #resource for all users
 
@@ -28,15 +23,23 @@ class Users(Resource):
         if not users:
             abort(404,message='Users not found')
         return users
-    @marshal_with(user_fields)
     #create a user
+    @marshal_with(user_fields)
     def post(self):
         args = user_args.parse_args()
-        new_user = UserModel(username=args['username'],email=args['email'])
-        db.session.add(new_user)
-        db.session.commit()
+        try:
+            existing_user = UserModel.query.filter_by(username=args['username']).first()
+            if existing_user:
+                abort(400, message="User with this username already exists")
+            new_user = UserModel(username=args['username'], email=args['email'],password=args['password'])
+            db.session.add(new_user)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            abort(400, message=f"There was an error creating the user: {e}")
+
         users = UserModel.query.all()
-        return users,201
+        return users, 201
     
 class User(Resource):
     @marshal_with(user_fields)
@@ -54,6 +57,7 @@ class User(Resource):
             abort(404,message='no user with that id')
         user.username = args['username']
         user.email = args['email']
+        user.password = args['password']
         db.session.commit()
         return user  
 
