@@ -50,3 +50,34 @@ class Teachers(Resource):
             db.session.rollback()
             abort(400, message=f"Error .could not create a teacher {str(e)}")
 
+class Teacher(Resource):
+    @marshal_with(teacher_fields)
+    def get(self, id):
+        teacher = TeacherModel.query.filter_by(id=id).first()
+        if not teacher:
+            abort(404, message='Teacher not found')
+        return teacher
+    
+    @marshal_with(teacher_fields)
+    def patch(self, id):
+        args = teacher_args.parse_args()
+        teacher = TeacherModel.query.filter_by(id=id).first()
+        if not teacher:
+            abort(404, message='Teacher not found')
+        teacher.first_name = args['first_name']
+        teacher.last_name = args['last_name']
+        teacher.email = args['email']
+        teacher.phone = args['phone']
+        teacher.department = args['department']
+        teacher.credits = args['credits']
+        db.session.commit()
+        return teacher
+    @marshal_with(teacher_fields)
+    def delete(self, id):
+        teacher = TeacherModel.query.filter_by(id=id).first()
+        if not teacher:
+            abort(404, message='Teacher not found')
+        db.session.delete(teacher)
+        db.session.commit()
+        return '', 204
+
