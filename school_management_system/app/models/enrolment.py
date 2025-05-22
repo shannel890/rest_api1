@@ -10,5 +10,6 @@ class EnrolmentModel(db.Model):
     grade = db.Column(db.String(2))
     status = db.Column(db.String(20), default='enrolled') #enrolled,completed,dropped
 
+    
     def __repr__(self):
         return f"Enrollment:{self.id}"
