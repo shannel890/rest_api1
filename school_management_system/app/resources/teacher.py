@@ -21,8 +21,6 @@ teacher_fields = {
     'hire_date': fields.DateTime,
     'credits': fields.Integer,
     'courses': fields.String
-
-
 }
 
 class Teachers(Resource):
@@ -50,5 +48,5 @@ class Teachers(Resource):
             return new_teacher, 201
         except Exception as e:
             db.session.rollback()
-            abort(400, message=f"Error creating a teacher {str(e)}")
+            abort(400, message=f"Error .could not create a teacher {str(e)}")
 
