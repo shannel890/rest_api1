@@ -35,7 +35,7 @@ class Teachers(Resource):
     def post(self):
         args = teacher_args.parse_args()
         try:
-            new_teacher = TeacherModel(
+            teacher = TeacherModel(
                 first_name=args['first_name'],
                 last_name=args['last_name'],
                 email=args['email'],
@@ -43,9 +43,9 @@ class Teachers(Resource):
                 department=args['department'],
                 credits=args['credits']
                 )
-            db.session.add(new_teacher)
+            db.session.add(teacher)
             db.session.commit()
-            return new_teacher, 201
+            return teacher, 201
         except Exception as e:
             db.session.rollback()
             abort(400, message=f"Error .could not create a teacher {str(e)}")
