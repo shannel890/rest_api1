@@ -20,6 +20,7 @@ fee_fields = {
     'amount': fields.Float,
     'status': fields.String,
     'semester': fields.String,
+    'payment_date': fields.DateTime(dt_format='iso8601'),
     'fee_type': fields.String
 }
 
