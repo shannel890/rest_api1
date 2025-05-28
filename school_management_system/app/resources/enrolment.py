@@ -20,6 +20,48 @@ enrolment_fields = {
 class Enrolments(Resource):
     @marshal_with(enrolment_fields)
     def get(self):
+        """Get all enrollments
+        ---
+        tags:
+            - Enrollments
+        summary: Retrieve all enrollments
+        description: This endpoint retrieves all enrollments from the system.
+        responses:
+            200:
+                description: List of all enrollments retrieved successfully
+                schema:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            id:
+                                type: integer
+                                description: The unique identifier of the enrollment
+                            student_id:
+                                type: integer
+                                description: The ID of the student
+                            course_id:
+                                type: integer
+                                description: The ID of the course
+                            enrolment_date:
+                                type: string
+                                format: date-time
+                                description: The enrollment date
+                            grade:
+                                type: string
+                                description: The grade received
+                            status:
+                                type: string
+                                description: The enrollment status
+            404:
+                description: No enrollments found
+                schema:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                            description: Enrollments not found!
+        """
         enrolments = EnrolmentModel.query.all()
         if not enrolments:
             abort(404, message='Enrolments not found')
@@ -27,6 +69,73 @@ class Enrolments(Resource):
 
     @marshal_with(enrolment_fields)
     def post(self):
+        """Create a new enrollment
+        ---
+        tags:
+            - Enrollments
+        summary: Create a new enrollment
+        description: This endpoint creates a new enrollment in the system.
+        parameters:
+            - in: body
+              name: enrollment
+              description: Enrollment data
+              required: true
+              schema:
+                  type: object
+                  required:
+                      - student_id
+                      - course_id
+                  properties:
+                      student_id:
+                          type: integer
+                          description: The ID of the student
+                      course_id:
+                          type: integer
+                          description: The ID of the course
+                      enrolment_date:
+                          type: string
+                          format: date-time
+                          description: The enrollment date
+                      grade:
+                          type: string
+                          description: The grade received
+                      status:
+                          type: string
+                          description: The enrollment status
+        responses:
+            201:
+                description: Enrollment created successfully
+                schema:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: The unique identifier of the created enrollment
+                        student_id:
+                            type: integer
+                            description: The ID of the student
+                        course_id:
+                            type: integer
+                            description: The ID of the course
+                        enrolment_date:
+                            type: string
+                            format: date-time
+                            description: The enrollment date
+                        grade:
+                            type: string
+                            description: The grade received
+                        status:
+                            type: string
+                            description: The enrollment status
+            400:
+                description: Bad request - validation error
+                schema:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                            description: Error message
+        """
         args = enrolment_args.parse_args()
         try:
             enrolment = EnrolmentModel(
@@ -44,6 +153,53 @@ class Enrolments(Resource):
 class Enrolment(Resource):
     @marshal_with(enrolment_fields)
     def get(self, id):
+        """
+        Get a specific enrolment by ID
+        ---
+        tags:
+            - Enrollments
+        summary: Retrieve an enrolment by ID
+        description: This endpoint retrieves a specific enrolment by its ID.
+        parameters:
+            - in: path
+              name: id
+              type: integer
+              required: true
+              description: The unique identifier of the enrolment
+        responses:
+            200:
+                description: Enrolment retrieved successfully
+                schema:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: The unique identifier of the enrollment
+                        student_id:
+                            type: integer
+                            description: The ID of the student
+                        course_id:
+                            type: integer
+                            description: The ID of the course
+                        enrolment_date:
+                            type: string
+                            format: date-time
+                            description: The enrollment date
+                        grade:
+                            type: string
+                            description: The grade received
+                        status:
+                            type: string
+                            description: The enrolment status
+            404:
+                description: Enrolment not found
+                schema:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                            description: Enrolment not found!
+        """
         enrolment = EnrolmentModel.query.filter_by(id=id).first()
         if not enrolment:
             abort(404, message='Enrolment not found')
@@ -67,6 +223,38 @@ class Enrolment(Resource):
             abort(400, message=f"Error: Could not update the enrolment. {str(e)}")
     @marshal_with(enrolment_fields)
     def delete(self, id):
+        """Delete an enrollment by ID
+        ---
+        tags:
+            - Enrollments
+        summary: Delete an enrollment
+        description: This endpoint deletes an enrollment from the system.
+        parameters:
+            - in: path
+              name: id
+              type: integer
+              required: true
+              description: The unique identifier of the enrollment
+        responses:
+            204:
+                description: Enrollment deleted successfully
+            404:
+                description: Enrollment not found
+                schema:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                            description: Enrollment not found!
+            400:
+                description: Bad request - error deleting enrollment
+                schema:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                            description: Error message
+        """
         enrolment = EnrolmentModel.query.filter_by(id=id).first()
         if not enrolment:
             abort(404, message='Enrolment not found')
