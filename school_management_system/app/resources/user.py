@@ -63,6 +63,59 @@ class Users(Resource):
     #create a user
     @marshal_with(user_fields)
     def post(self):
+          
+        """Create a new user
+        ---
+        tags:
+            - Users
+        summary: Create a new user
+        description: This endpoint creates a new user in the system.
+        parameters:
+            - in: body
+              name: user
+              description: User data
+              required: true
+              schema:
+                  type: object
+                  required:
+                      - username
+                      - email
+                      - password
+                  properties:
+                      username:
+                          type: string
+                          description: The username of the user
+                      email:
+                          type: string
+                          description: The email of the user
+                      password:
+                          type: string
+                          description: The password of the user
+        responses:
+            201:
+                description: User created successfully
+                schema:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: The unique identifier of the created user
+                        username:
+                            type: string
+                            description: The username of the user
+                        email:
+                            type: string
+                            description: The email of the user
+            400:
+                description: Bad request - validation error
+                schema:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                            description: Error message
+        """
+        
         args = user_args.parse_args()
         try:
             existing_user = UserModel.query.filter_by(username=args['username']).first()
