@@ -28,6 +28,53 @@ student_fields = {
 class Students(Resource):
     @marshal_with(student_fields)
     def get(self):
+        
+        """Get all students
+        ---
+        tags:
+            - Students
+        summary: Retrieve all students
+        description: This endpoint retrieves all students from the system.
+        responses:
+            200:
+                description: List of all students retrieved successfully
+                schema:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            id:
+                                type: integer
+                                description: The unique identifier of the student
+                            first_name:
+                                type: string
+                                description: The first name of the student
+                            last_name:
+                                type: string
+                                description: The last name of the student
+                            student_id:
+                                type: string
+                                description: The student ID
+                            email:
+                                type: string
+                                description: The email of the student
+                            date_of_birth:
+                                type: string
+                                format: date-time
+                                description: The date of birth of the student
+                            enrolment_date:
+                                type: string
+                                format: date-time
+                                description: The enrolment date of the student
+            404:
+                description: No students found
+                schema:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                            description: Students not found!
+        """
         students = StudentModel.query.all()
         if not students:
             abort(404, message='Students not found')
@@ -35,6 +82,76 @@ class Students(Resource):
     
     @marshal_with(student_fields)
     def post(self):
+            
+        """Create a new student
+        ---
+        tags:
+            - Students
+        summary: Create a new student
+        description: This endpoint creates a new student in the system.
+        parameters:
+            - in: body
+              name: student
+              description: Student data
+              required: true
+              schema:
+                  type: object
+                  required:
+                      - first_name
+                      - last_name
+                      - student_id
+                      - email
+                  properties:
+                      first_name:
+                          type: string
+                          description: The first name of the student
+                      last_name:
+                          type: string
+                          description: The last name of the student
+                      student_id:
+                          type: string
+                          description: The student ID
+                      email:
+                          type: string
+                          description: The email of the student
+                      date_of_birth:
+                          type: string
+                          format: date-time
+                          description: The date of birth of the student
+                      enrolment_date:
+                          type: string
+                          format: date-time
+                          description: The enrolment date of the student
+        responses:
+            201:
+                description: Student created successfully
+                schema:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: The unique identifier of the created student
+                        first_name:
+                            type: string
+                            description: The first name of the student
+                        last_name:
+                            type: string
+                            description: The last name of the student
+                        student_id:
+                            type: string
+                            description: The student ID
+                        email:
+                            type: string
+                            description: The email of the student
+            400:
+                description: Bad request - validation error
+                schema:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                            description: Error message
+        """
         args = student_args.parse_args()
         try:
             student = StudentModel(
