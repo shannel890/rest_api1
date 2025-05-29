@@ -28,7 +28,6 @@ student_fields = {
 class Students(Resource):
     @marshal_with(student_fields)
     def get(self):
-        
         """Get all students
         ---
         tags:
@@ -82,7 +81,6 @@ class Students(Resource):
     
     @marshal_with(student_fields)
     def post(self):
-            
         """Create a new student
         ---
         tags:
