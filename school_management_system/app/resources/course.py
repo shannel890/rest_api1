@@ -342,4 +342,3 @@ class Course(Resource):
         db.session.commit()
         return '', 204
 
-    
