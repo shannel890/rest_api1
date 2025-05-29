@@ -26,7 +26,6 @@ teacher_fields = {
 class Teachers(Resource):
     @marshal_with(teacher_fields)
     def get(self):
-            
         """Get all teachers
         ---
         tags:
@@ -78,7 +77,6 @@ class Teachers(Resource):
     
     @marshal_with(teacher_fields)
     def post(self):
-            
         """Create a new teacher
         ---
         tags:
@@ -98,7 +96,6 @@ class Teachers(Resource):
                       - email
                       - phone
                       - department
-                      - credits
                   properties:
                       first_name:
                           type: string
