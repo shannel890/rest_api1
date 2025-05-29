@@ -19,42 +19,41 @@ class Users(Resource):
     @marshal_with(user_fields)
     #get all users
     def get(self):
-        """
-        Get all users 
+        """Get all users
         ---
         tags:
-          - Users
-        summary: Get all users
-        description: Retrieve a list of all users in the system.
+            - Users
+        summary: Retrieve all users
+        description: This endpoint retrieves all users from the system.
         responses:
-          200:
-            description: A list of all users retrieved successfully
-            schema:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    description: The unique identifier of the user
-                  username:
-                    type: string
-                    description: The username of the user
-                  email:
-                    type: string
-                    description: The email of the user
-                  created_at:
-                    type: string
-                    format: date-time
-                    description: The date and time when the user was created
-          404:
-            description: No users found
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  description: Error message indicating that no users were found
+            200:
+                description: List of all users retrieved successfully
+                schema:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            id:
+                                type: integer
+                                description: The unique identifier of the user
+                            username:
+                                type: string
+                                description: The username of the user
+                            email:
+                                type: string
+                                description: The email of the user
+                            created_at:
+                                type: string
+                                format: date-time
+                                description: The date and time when the user was created
+            404:
+                description: No users found
+                schema:
+                    type: object
+                    properties:
+                        message:
+                            type: string
+                            description: Users not found!
         """
         users = UserModel.query.all()
         if not users:
@@ -63,7 +62,6 @@ class Users(Resource):
     #create a user
     @marshal_with(user_fields)
     def post(self):
-          
         """Create a new user
         ---
         tags:
@@ -90,7 +88,7 @@ class Users(Resource):
                           description: The email of the user
                       password:
                           type: string
-                          description: The password of the user
+                          description: The password for the user account
         responses:
             201:
                 description: User created successfully
@@ -159,7 +157,7 @@ class User(Resource):
         db.session.delete(user)
         db.session.commit()
         return f'user deleted successfully'
-   
+
 
 
 
