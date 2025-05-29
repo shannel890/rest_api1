@@ -50,20 +50,14 @@ class Fees(Resource):
                             amount:
                                 type: number
                                 format: float
-                                description: The amount of the fee
-                            fee_type:
-                                type: string
-                                description: The type of fee
-                            semester:
-                                type: string
-                                description: The semester for the fee
+                                description: The fee amount
                             payment_date:
                                 type: string
                                 format: date-time
-                                description: The payment date of the fee
+                                description: The date of payment
                             status:
                                 type: string
-                                description: The status of the fee payment
+                                description: The payment status
             404:
                 description: No fees found
                 schema:
@@ -96,7 +90,6 @@ class Fees(Resource):
                   required:
                       - student_id
                       - amount
-                      - fee_type
                   properties:
                       student_id:
                           type: integer
@@ -104,20 +97,14 @@ class Fees(Resource):
                       amount:
                           type: number
                           format: float
-                          description: The amount of the fee
-                      fee_type:
-                          type: string
-                          description: The type of fee
-                      semester:
-                          type: string
-                          description: The semester for the fee
+                          description: The fee amount
                       payment_date:
                           type: string
                           format: date-time
-                          description: The payment date of the fee
+                          description: The date of payment
                       status:
                           type: string
-                          description: The status of the fee payment
+                          description: The payment status
         responses:
             201:
                 description: Fee created successfully
@@ -133,20 +120,14 @@ class Fees(Resource):
                         amount:
                             type: number
                             format: float
-                            description: The amount of the fee
-                        fee_type:
-                            type: string
-                            description: The type of fee
-                        semester:
-                            type: string
-                            description: The semester for the fee
+                            description: The fee amount
                         payment_date:
                             type: string
                             format: date-time
-                            description: The payment date of the fee
+                            description: The date of payment
                         status:
                             type: string
-                            description: The status of the fee payment
+                            description: The payment status
             400:
                 description: Bad request - validation error
                 schema:
